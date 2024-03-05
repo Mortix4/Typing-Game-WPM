@@ -19,34 +19,39 @@ class Game:
     def startGame(self):
         pass
     
-    def mainLoop(self):
+    def mainLoop(self, screen, timer, fps, background):
+        pygame.mixer.music.load("background_music.mp3")
+        pygame.mixer.music.play(-1)
+
+        
         running = True
         while running:
-            screen.fill('gray')
+            screen.blit(background, (0, 0))
             timer.tick(fps)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    running = False
             pygame.display.flip()
+            
+        pygame.mixer.music.stop()
         pygame.quit()
         
 def initScreen():
     pygame.init()
     screen = pygame.display.set_mode([WIDTH, HEIGHT])
     pygame.display.set_caption("Typing Test")
-    surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-    timer = pygame.timer.Clock()
-    fps = 60
+    background = pygame.image.load("space.webp").convert()
+    return screen, pygame.time.Clock(), 60, background
+
+
 
 def main():
-    initScreen()
+    screen, timer, fps, background = initScreen()
     curr_game = Game()
-    Game.mainLoop()
+    curr_game.mainLoop(screen, timer, fps, background)
     
     
-
-
 if __name__ == "__main__":
     main()
     
