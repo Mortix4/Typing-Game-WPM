@@ -4,6 +4,7 @@ import os
 
 WIDTH = 1000
 HEIGHT = 600
+total_words_typed = 0
 
 class Word:
     def __init__(self, text, x, y, speed):
@@ -24,6 +25,7 @@ class Game:
         self.background = pygame.image.load(os.path.join("assets", "pictures", "space.webp")).convert()
         pygame.mixer.music.load(os.path.join("assets", "sounds", "background_music.mp3"))
         pygame.mixer.music.set_volume(0.5)
+
 
         # Define the Start, Restart, and Difficulty buttons
         self.start_button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 - 30, 200, 50)
@@ -110,17 +112,20 @@ class Game:
                 self.user_input += event.unicode.lower()
     
     def check_user_input(self):
+        global total_words_typed  # Reference the global variable
         for word in self.word_objects:
             if self.user_input == word.text.lower():
                 # Remove the word if it matches user input
                 self.word_objects.remove(word)
                 self.correct_words += 1
+                self.total_words += 1
+                total_words_typed += 1
                 break
             
     def calculate_wpm(self):
-        total_words_typed = self.correct_words
-        minutes_elapsed = max((self.initial_timer - self.timer) / 60, 1)  # Ensure a minimum of 1 minute to avoid division by zero
-        return int((total_words_typed / 5) / minutes_elapsed)
+        global total_words_typed
+        return total_words_typed
+
 
     def calculate_accuracy(self):
         if self.total_words == 0:
@@ -128,6 +133,8 @@ class Game:
         return int((self.correct_words / self.total_words) * 100)
             
     def falling_words_animation(self, words, fps):
+        global total_words_typed  # Reference the global variable
+        total_words_typed = 0
         clock = pygame.time.Clock()
 
         drop_interval = 1000
@@ -236,7 +243,8 @@ class Game:
             self.screen.blit(button_text, button_rect)
 
             for key, button in self.difficulty_buttons.items():
-                pygame.draw.rect(self.screen, (0, 128, 255), button)
+                border_color = (255, 0, 0) if key == self.difficulty else (0, 128, 255)
+                pygame.draw.rect(self.screen, border_color, button, 3)  # Draw a border around the difficulty button
                 self.screen.blit(self.difficulty_icons[key], button.topleft)
 
             pygame.display.flip()
