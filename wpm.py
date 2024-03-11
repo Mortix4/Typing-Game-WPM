@@ -6,6 +6,7 @@ WIDTH = 1000
 HEIGHT = 600
 total_words_typed = 0
 
+
 class Word:
     def __init__(self, text, x, y, speed):
         self.text = text
@@ -41,11 +42,11 @@ class Game:
         self.restart_icon = pygame.transform.scale(original_restart_icon, (30, 30))
 
         original_difficulty_icons = {
-            "easy": pygame.image.load(os.path.join("assets", "pictures", "easy_icon.png")),
-            "medium": pygame.image.load(os.path.join("assets", "pictures", "medium_icon.png")),
-            "hard": pygame.image.load(os.path.join("assets", "pictures", "hard_icon.png"))
+            "easy": pygame.image.load(os.path.join("assets", "pictures", "easy_icon2.png")),
+            "medium": pygame.image.load(os.path.join("assets", "pictures", "medium_icon2.png")),
+            "hard": pygame.image.load(os.path.join("assets", "pictures", "hard_icon2.png"))
         }
-        self.difficulty_icons = {key: pygame.transform.scale(img, (30, 30)) for key, img in original_difficulty_icons.items()}
+        self.difficulty_icons = {key: pygame.transform.scale(img, (100, 47)) for key, img in original_difficulty_icons.items()}
 
         # Initial state
         self.state = "start"
@@ -253,9 +254,9 @@ class Game:
         if self.difficulty == "easy":
             return random.randint(1, 3)
         elif self.difficulty == "medium":
-            return random.randint(2, 5)
+            return random.randint(2, 4)
         elif self.difficulty == "hard":
-            return random.randint(4, 7)
+            return random.randint(3, 5)
         else:
             return random.randint(1, 3)
 
